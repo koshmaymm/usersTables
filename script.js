@@ -1,6 +1,6 @@
 window.onload = function () {
     var container = {};
-    container.generetNewPerson = function () {
+    container.generatNewPerson = function () {
         var data = container.getPersonData()
             , stringWithData = container.createNewLabelOfTable(data);
         container.pushInTable(stringWithData);
@@ -22,14 +22,18 @@ window.onload = function () {
     }
     container.clearInputs = function () {
         personName.value = "";
-        var c = document.querySelectorAll('.testClass');
-        for (var i = 0; i < c.length; i++) {
-            c[i].checked = false;
+        var inputs = document.querySelectorAll('.testClass');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].checked = false;
         }
     }
     container.pushInTable = function (a) {
         tableBody.appendChild(a);
         container.clearInputs();
+    }
+	container.showTotalPerson = function () {
+        var totalPerson = document.querySelectorAll("tr").length - 1;
+        exitAllPerson.innerHTML = "" + totalPerson;
     }
     container.pushDataFromLocalStorage = function (localData) {
         var tableRowLS = document.createElement('tr')
@@ -45,23 +49,40 @@ window.onload = function () {
         tableRowLS.appendChild(tableCellGeniusLS);
         tableRowLS.appendChild(buttonDel);
         container.pushInTable(tableRowLS);
+		container.bindDelete();
+		container.showTotalPerson();
     }
     container.checkLocolStorage = function () {
         if (window.localStorage) {
-            var a = localStorage
-                , arr = [];
-            for (var i = 0; i < a.length; i++) {
-                var abc = a.key(i);
-                var abcd = a[abc].split(',');
-                var abcde = abcd.unshift(abc);
-                container.pushDataFromLocalStorage(abcd);
+            var localStorageData = localStorage;
+            for (var i = 0; i < localStorageData.length; i++) {
+                var keyName = localStorageData.key(i);
+                var localStorageDataKeyNameParam = localStorageData[keyName].split(','); 
+                localStorageDataKeyNameParam.unshift(keyName);
+                container.pushDataFromLocalStorage(localStorageDataKeyNameParam);
             }
         }
     }
+	container.bindDelete = function (e) {
+        var buttons = document.querySelectorAll(".classButtonDel");
+        for (var i = 0, n = buttons.length; i < n; i++) {
+            buttons[i].addEventListener("click", function (e) {
+                e.target.parentNode.parentNode.remove();
+                container.showTotalPerson();
+				var keyNameLS = e.target.parentNode.parentNode.firstChild.textContent;
+				localStorage.removeItem(keyNameLS);	
+            }, false);
+        }
+		
+    }
     container.checkLocolStorage();
     container.getPersonData = function () {
-        var personName = document.getElementById('personName').value
-            , personSuperPower = checkPersonSuperPower.checked
+        var personName = document.getElementById('personName').value;
+		if (localStorage.getItem(personName)){
+			container.clearInputs();
+			return false
+			}
+        var personSuperPower = checkPersonSuperPower.checked
             , personRich = checkPersonRich.checked
             , personGenius = checkPersonGenius.checked
             , personData = [personName, personSuperPower, personRich, personGenius];
@@ -89,19 +110,8 @@ window.onload = function () {
         tableRow.appendChild(buttonDel);
         return tableRow;
     }
-    container.showTotalPerson = function () {
-        var totalPerson = document.querySelectorAll("tr").length - 1;
-        exitAllPerson.innerHTML = "" + totalPerson;
-    }
-    container.bindDelete = function () {
-        var buttons = document.querySelectorAll(".classButtonDel");
-        for (var i = 0, n = buttons.length; i < n; i++) {
-            buttons[i].addEventListener("click", function (e) {
-                e.target.parentNode.parentNode.remove();
-                container.showTotalPerson();
-            }, false);
-        }
-    }
+    
+    
     container.sortData = function (e) {
         var columnSort = e.target;
         switch (columnSort) {
@@ -151,8 +161,9 @@ window.onload = function () {
         localStorage.setItem(arr[0], arr[1] + "," + arr[2] + "," + arr[3]);
     }
     container.buttonAddNewPerson = document.getElementById('addId');
-    container.buttonAddNewPerson.addEventListener("click", container.generetNewPerson, false);
-    container.buttonSort = document.getElementsByClassName("sortButtons");
+    container.buttonAddNewPerson.addEventListener("click", container.generatNewPerson, false);
+    
+	container.buttonSort = document.getElementsByClassName("sortButtons");
     for (var i = 0, n = container.buttonSort.length; i < n; i++) {
         container.buttonSort[i].addEventListener("click", container.sortData, false);
     }
