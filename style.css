@@ -78,10 +78,12 @@ td {
     background-color: #FFE4B5;
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
-.notHidenCells{
-	color: green;
+
+.notHidenCells {
+    color: green;
 }
+
 .hidenCells {
-	color: red;
-	display: none;
+    color: red;
+    display: none;
 }
