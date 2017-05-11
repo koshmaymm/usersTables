@@ -1,6 +1,5 @@
 window.onload = function () {
     var container = {};
-	
     container.generatNewPerson = function () {
         var data = container.getPersonData()
             , stringWithData = container.createNewLabelOfTable(data);
@@ -32,7 +31,7 @@ window.onload = function () {
         tableBody.appendChild(a);
         container.clearInputs();
     }
-	container.showTotalPerson = function () {
+    container.showTotalPerson = function () {
         var totalPerson = document.querySelectorAll("tr").length - 1;
         exitAllPerson.innerHTML = " " + totalPerson;
     }
@@ -50,39 +49,38 @@ window.onload = function () {
         tableRowLS.appendChild(tableCellGeniusLS);
         tableRowLS.appendChild(buttonDel);
         container.pushInTable(tableRowLS);
-		container.bindDelete();
-		container.showTotalPerson();
+        container.bindDelete();
+        container.showTotalPerson();
     }
     container.checkLocolStorage = function () {
         if (window.localStorage) {
             var localStorageData = localStorage;
             for (var i = 0; i < localStorageData.length; i++) {
                 var keyName = localStorageData.key(i);
-                var localStorageDataKeyNameParam = localStorageData[keyName].split(','); 
+                var localStorageDataKeyNameParam = localStorageData[keyName].split(',');
                 localStorageDataKeyNameParam.unshift(keyName);
                 container.pushDataFromLocalStorage(localStorageDataKeyNameParam);
             }
         }
     }
-	
-	container.bindDelete = function (e) {
+    container.bindDelete = function (e) {
         var buttons = document.querySelectorAll(".classButtonDel");
         for (var i = 0, n = buttons.length; i < n; i++) {
             buttons[i].addEventListener("click", function (e) {
                 e.target.parentNode.parentNode.remove();
                 container.showTotalPerson();
-				var keyNameLS = e.target.parentNode.parentNode.firstChild.textContent;
-				localStorage.removeItem(keyNameLS);	
+                var keyNameLS = e.target.parentNode.parentNode.firstChild.textContent;
+                localStorage.removeItem(keyNameLS);
             }, false);
-        }	
+        }
     }
     container.checkLocolStorage();
     container.getPersonData = function () {
         var personName = document.getElementById('personName').value;
-		if (localStorage.getItem(personName)){
-			container.clearInputs();
-			return false
-			}
+        if (localStorage.getItem(personName)) {
+            container.clearInputs();
+            return false
+        }
         var personSuperPower = checkPersonSuperPower.checked
             , personRich = checkPersonRich.checked
             , personGenius = checkPersonGenius.checked
@@ -111,8 +109,6 @@ window.onload = function () {
         tableRow.appendChild(buttonDel);
         return tableRow;
     }
-    
-    
     container.sortData = function (e) {
         var columnSort = e.target;
         switch (columnSort) {
@@ -157,36 +153,37 @@ window.onload = function () {
             tbody.appendChild(rowsArray[i]);
         }
         table.appendChild(tbody);
-		container.hideCells(columnSort, cellNamber, tbody);
+        container.hideCells(columnSort, cellNamber, tbody);
     }
     container.pushInLocolStorage = function (arr) {
         localStorage.setItem(arr[0], arr[1] + "," + arr[2] + "," + arr[3]);
     }
     container.buttonAddNewPerson = document.getElementById('addId');
     container.buttonAddNewPerson.addEventListener("click", container.generatNewPerson, false);
-    
-	container.buttonSort = document.getElementsByClassName("sortButtons");
+    container.buttonSort = document.getElementsByClassName("sortButtons");
     for (var i = 0, n = container.buttonSort.length; i < n; i++) {
         container.buttonSort[i].addEventListener("click", container.sortData, false);
     }
-	
-	container.hideCells = function(a, b, c){
-	if (b === 0) {container.showAllCells(); return;}
-		container.showAllCells();	
-			for (var i = 1, k = c.childNodes.length; i < k; i++) {
-			   if (c.childNodes[i].childNodes[b].textContent === 'false'){
-					c.childNodes[i].className = "hidenCells";
-				};
-			}
-	}
-	container.showAllCells = function(){
-		//console.log("HI");
-		var tab = document.getElementById("table").rows;
-			for (var i = 1; i < tab.length; i++) {
-					if(tab[i].classList.contains('hidenCells')){
-						tab[i].classList.remove('hidenCells');
-						console.log("HI");
-					}		
-			}
-	}
+    container.hideCells = function (a, b, c) {
+        if (b === 0) {
+            container.showAllCells();
+            return;
+        }
+        container.showAllCells();
+        for (var i = 1, k = c.childNodes.length; i < k; i++) {
+            if (c.childNodes[i].childNodes[b].textContent === 'false') {
+                c.childNodes[i].className = "hidenCells";
+            };
+        }
+    }
+    container.showAllCells = function () {
+        //console.log("HI");
+        var tab = document.getElementById("table").rows;
+        for (var i = 1; i < tab.length; i++) {
+            if (tab[i].classList.contains('hidenCells')) {
+                tab[i].classList.remove('hidenCells');
+                console.log("HI");
+            }
+        }
+    }
 }
