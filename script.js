@@ -1,5 +1,6 @@
 window.onload = function () {
     var container = {};
+	
     container.generatNewPerson = function () {
         var data = container.getPersonData()
             , stringWithData = container.createNewLabelOfTable(data);
@@ -33,7 +34,7 @@ window.onload = function () {
     }
 	container.showTotalPerson = function () {
         var totalPerson = document.querySelectorAll("tr").length - 1;
-        exitAllPerson.innerHTML = "" + totalPerson;
+        exitAllPerson.innerHTML = " " + totalPerson;
     }
     container.pushDataFromLocalStorage = function (localData) {
         var tableRowLS = document.createElement('tr')
@@ -63,6 +64,7 @@ window.onload = function () {
             }
         }
     }
+	
 	container.bindDelete = function (e) {
         var buttons = document.querySelectorAll(".classButtonDel");
         for (var i = 0, n = buttons.length; i < n; i++) {
@@ -72,8 +74,7 @@ window.onload = function () {
 				var keyNameLS = e.target.parentNode.parentNode.firstChild.textContent;
 				localStorage.removeItem(keyNameLS);	
             }, false);
-        }
-		
+        }	
     }
     container.checkLocolStorage();
     container.getPersonData = function () {
@@ -156,6 +157,7 @@ window.onload = function () {
             tbody.appendChild(rowsArray[i]);
         }
         table.appendChild(tbody);
+		container.hideCells(columnSort, cellNamber, tbody);
     }
     container.pushInLocolStorage = function (arr) {
         localStorage.setItem(arr[0], arr[1] + "," + arr[2] + "," + arr[3]);
@@ -167,4 +169,24 @@ window.onload = function () {
     for (var i = 0, n = container.buttonSort.length; i < n; i++) {
         container.buttonSort[i].addEventListener("click", container.sortData, false);
     }
+	
+	container.hideCells = function(a, b, c){
+	if (b === 0) {container.showAllCells(); return;}
+		container.showAllCells();	
+			for (var i = 1, k = c.childNodes.length; i < k; i++) {
+			   if (c.childNodes[i].childNodes[b].textContent === 'false'){
+					c.childNodes[i].className = "hidenCells";
+				};
+			}
+	}
+	container.showAllCells = function(){
+		//console.log("HI");
+		var tab = document.getElementById("table").rows;
+			for (var i = 1; i < tab.length; i++) {
+					if(tab[i].classList.contains('hidenCells')){
+						tab[i].classList.remove('hidenCells');
+						console.log("HI");
+					}		
+			}
+	}
 }
