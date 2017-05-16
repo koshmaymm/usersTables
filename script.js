@@ -165,10 +165,6 @@ window.onload = function () {
         container.buttonSort[i].addEventListener("click", container.sortData, false);
     }
     container.hideCells = function (a, b, c) {
-        if (b === 0) {
-            container.showAllCells();
-            return;
-        }
         container.showAllCells();
         for (var i = 1, k = c.childNodes.length; i < k; i++) {
             if (c.childNodes[i].childNodes[b].textContent === 'false') {
@@ -177,7 +173,6 @@ window.onload = function () {
         }
     }
     container.showAllCells = function () {
-        //console.log("HI");
         var tab = document.getElementById("table").rows;
         for (var i = 1; i < tab.length; i++) {
             if (tab[i].classList.contains('hidenCells')) {
